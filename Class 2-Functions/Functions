@@ -38,8 +38,8 @@ function calculateTotal(price, tax = 0.05) { // 0.05 is the default
     return price + (price * tax);
 }
 
-console.log(calculateTotal(100));     // Uses default tax (105)
-console.log(calculateTotal(100, 0.1)); // Overwrites default (110)
+console.log(calculateTotal(100));     
+console.log(calculateTotal(100, 0.1)); 
 
 
 // ==========================================
