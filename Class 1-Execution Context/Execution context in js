@@ -1,0 +1,94 @@
+/**
+ * @file JS-Engine-Execution-Context.js
+ * @description A deep dive into the V8 Engine, Hoisting, and the Scope Chain.
+ */
+
+// ==========================================
+// 1. THE EXECUTION CONTEXT: THE "TWO PHASES"
+// ==========================================
+/* * Everything in JS happens inside an Execution Context.
+ * PHASE 1: Memory Creation - JS scans code and allocates space.
+ * PHASE 2: Code Execution - Line-by-line assignment and execution.
+ */
+
+
+
+// ==========================================
+// 2. HOISTING: THE "SNEAK PEEK"
+// ==========================================
+
+console.log(hoistedVar); // Returns: undefined (Memory is allocated, but value isn't assigned yet)
+// console.log(hoistedLet); // ❌ ReferenceError: Cannot access before initialization (Temporal Dead Zone)
+
+var hoistedVar = "I am var";
+let hoistedLet = "I am let";
+
+// Functions are fully hoisted
+greet(); 
+
+function greet() {
+    console.log("I can be called anywhere because my whole body is hoisted!");
+}
+
+
+// ==========================================
+// 3. SCOPE & THE LEAKY 'VAR'
+// ==========================================
+/* * Block Scope ({}) applies to let and const.
+ * var is Function Scoped, meaning it "leaks" out of if-statements and loops!
+ */
+
+{
+    var leaked = "I am everywhere";
+    let trapped = "I stay in this block";
+}
+
+console.log(leaked);  // "I am everywhere"
+// console.log(trapped); // ❌ ReferenceError: trapped is not defined
+
+
+// ==========================================
+// 4. THE SCOPE CHAIN (LEXICAL ENVIRONMENT)
+// ==========================================
+/* * If a variable isn't in the local "room" (context), JS looks at the
+ * "Reference to Parent" to find it. This links all the way to Global.
+ */
+
+const globalValue = "Global";
+
+function outer() {
+    const outerValue = "Outer";
+
+    function inner() {
+        const innerValue = "Inner";
+        // JS looks: Inner? Yes. Outer? Yes. Global? Yes.
+        console.log(`${innerValue} -> ${outerValue} -> ${globalValue}`);
+    }
+    
+    inner();
+}
+
+outer();
+
+
+// ==========================================
+// 5. THE JS ENGINE: V8 & BEYOND
+// ==========================================
+/* * The Engine (V8, SpiderMonkey) translates JS into Machine Code (0s and 1s).
+ * * 1. Parser: Reads code and creates an Abstract Syntax Tree (AST).
+ * 2. Interpreter: Starts executing code quickly.
+ * 3. Compiler: Optimizes "hot" code for maximum speed.
+ */
+
+
+
+// ==========================================
+// SUMMARY
+// ==========================================
+/**
+ * KEY TAKEAWAYS:
+ * - 'var' is initialized as 'undefined' in the memory phase.
+ * - 'let' and 'const' are in the Temporal Dead Zone (TDZ) until the line of code is hit.
+ * - The Scope Chain only works UPWARDS (Inner can see Outer, but Outer cannot see Inner).
+ * - JS is a Synchronous, Single-threaded language with a fancy Execution Context.
+ */
