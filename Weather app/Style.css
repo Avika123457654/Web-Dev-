@@ -1,64 +1,69 @@
-*{
+* {
     box-sizing: border-box;
 }
-body{
+
+body {
+    margin: 0;
     padding: 0;
-    margin:0;
 }
 
-header{
+header {
     display: flex;
-    background-color:#80899e;
+    justify-content: center;
+    align-items: center;
     height: 100px;
-    align-items: center;
-    justify-content: center;
-    align-items: center;
+    background-color: #80899e;
 }
-main{
+
+main {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #325559;
     height: calc(100vh - 100px);
+    background-color: #80899e;
     color: white;
 }
 
-.weather{
+.weather {
     display: flex;
     gap: 10px;
 } 
-.weather-image{
+
+.weather-image {
+    height: 100px;
     border-radius: 12px;
-    height:100px
 }
 
-.city{
+.city {
     font-size: xx-large;
 }
-.temp{
+
+.temp {
     font-size: 24px;
 }
-.weather-condition{
-    text-align: center;
+
+.weather-condition {
     font-size: larger;
+    text-align: center;
 }
 
-.btn{
-    background-color: white;
+.btn {
     padding: 1px;
     border: none;
     border-radius: 2px;
+    background-color: white;
     font-size: small;
 }
 
-.Search-Bar{
-    background-color: #80899e;
+.Search-Bar {
+    width: 200px;
     border: 1px solid black;
     border-radius: 2px;
+    background-color: #80899e;
     color: white;
-    width: 200px;
 } 
-.Search-Bar::placeholder{
-    color: white;
+
+.Search-Bar::placeholder {
     padding: 12px;
+    color: white;
 }
