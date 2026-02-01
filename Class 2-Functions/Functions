@@ -1,0 +1,111 @@
+/**
+ * @file JS-Functions.js
+ * @description The ultimate guide to JavaScript Functions: Scope, Hoisting, and the 'this' keyword.
+ */
+
+// ==========================================
+// 1. DECLARATION VS. EXPRESSION (HOISTING)
+// ==========================================
+
+// --- Function Declaration ---
+// HOISTED: You can call this before it's defined!
+greetDeclaration(); 
+
+function greetDeclaration() {
+    console.log("Hello from a Declaration! (I am hoisted)");
+}
+
+// --- Function Expression ---
+// NOT HOISTED: Treated like a variable. Error if called before definition.
+// greetExpression(); // ❌ ReferenceError
+
+const greetExpression = function() {
+    console.log("Hello from an Expression! (I am NOT hoisted)");
+};
+greetExpression(); // ✅ This works
+
+
+// ==========================================
+// 2. PARAMETERS, ARGUMENTS, AND DEFAULTS
+// ==========================================
+/*
+ * Parameters: Placeholders (a, b)
+ * Arguments: Actual values (5, 10)
+ * Default Parameters: Prevents 'undefined' errors.
+ */
+
+function calculateTotal(price, tax = 0.05) { // 0.05 is the default
+    return price + (price * tax);
+}
+
+console.log(calculateTotal(100));     // Uses default tax (105)
+console.log(calculateTotal(100, 0.1)); // Overwrites default (110)
+
+
+// ==========================================
+// 3. ARROW FUNCTIONS & THE 'this' CONTEXT
+// ==========================================
+/* * Concise syntax. If it's a one-liner, 'return' and {} are implied.
+ * ARROW FUNCTIONS inherit 'this' from the surrounding scope (Lexical).
+ */
+
+const add = (a, b) => a + b; // Implicit return
+
+const user = {
+    name: "Alex",
+    // Regular Method: 'this' refers to the object
+    regularGreeting: function() {
+        console.log(`Hi, I'm ${this.name}`);
+    },
+    // Arrow Function: 'this' refers to the Global Scope (or Window)
+    arrowGreeting: () => {
+        console.log(`Hi, I'm ${this.name}`); 
+    }
+};
+
+user.regularGreeting(); // "Hi, I'm Alex"
+user.arrowGreeting();   // "Hi, I'm undefined" (Inherits from global)
+
+
+// ==========================================
+// 4. THE REST OPERATOR (...)
+// ==========================================
+/* * Collects an unknown number of arguments into a single Array.
+ * RULE: Must be the LAST parameter.
+ */
+
+function sumEverything(label, ...numbers) {
+    const total = numbers.reduce((acc, curr) => acc + curr, 0);
+    console.log(`${label}: ${total}`);
+}
+
+sumEverything("My Score", 10, 20, 30, 40); // Bundles numbers into [10, 20, 30, 40]
+
+
+// ==========================================
+// 5. IIFE (IMMEDIATELY INVOKED FUNCTION EXPRESSION)
+// ==========================================
+/*
+ * Runs immediately upon definition.
+ * Used to create "Private Scopes" and avoid polluting the Global Scope.
+ */
+
+(function() {
+    const privateVar = "I am hidden from the world";
+    console.log("IIFE has executed!");
+})();
+
+// console.log(privateVar); // ❌ Error: privateVar is not defined
+
+
+// ==========================================
+// SUMMARY TABLE: FUNCTIONS AT A GLANCE
+// ==========================================
+/*
+| Feature          | Declaration | Expression | Arrow Function |
+|------------------|-------------|------------|----------------|
+| Hoisted          | Yes         | No         | No             |
+| Own 'this'       | Yes         | Yes        | No (Lexical)   |
+| Syntax           | function x()| const x=fn | const x=()=>   |
+| Use for Methods? | Yes         | Yes        | Not usually    |
+*/
