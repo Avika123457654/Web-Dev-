@@ -1,0 +1,87 @@
+/**
+ * @file JS-Data-Structures-Memory.js
+ * @description Masterclass on Mutability, Strings vs. Arrays, and Memory Management.
+ */
+
+// ==========================================
+// 1. STRINGS: THE "IMMUTABLE" TEXT
+// ==========================================
+/* * CRITICAL CONCEPT: Strings are Immutable. 
+ * Any modification creates a BRAND NEW string in memory.
+ */
+
+let originalString = "  JavaScript Mastery  ";
+
+// Methods don't change 'originalString', they return a new value
+let upper = originalString.toUpperCase(); 
+let trimmed = originalString.trim();
+let sliced = originalString.slice(2, 12); // "JavaScript" (can take negative index)
+let sub = originalString.substring(2, 12); // Same as slice, but NO negative index
+
+console.log(originalString); // "  JavaScript Mastery  " (Unchanged!)
+console.log(trimmed.includes("Mastery")); // true
+
+
+// ==========================================
+// 2. ARRAYS: THE "MUTABLE" LISTS
+// ==========================================
+/* * Arrays are Mutable. You can change the original data in the Heap.
+ */
+
+const techStack = ["HTML", "CSS"];
+
+techStack.push("JS");       // Add to END
+techStack.unshift("SQL");   // Add to START
+techStack.pop();            // Remove from END
+techStack.shift();          // Remove from START
+
+// The Swiss Army Knife: splice(start, deleteCount, item1, ...)
+techStack.splice(1, 1, "React"); // Modifies original array directly
+
+console.log(techStack); // Original is modified!
+
+
+// ==========================================
+// 3. MUTABILITY & MEMORY (STACK VS. HEAP)
+// ==========================================
+/*
+ * STACK: Fast access. Stores Primitives (String, Number, Boolean).
+ * HEAP: Larger storage. Stores Non-Primitives (Arrays, Objects).
+ */
+
+
+
+// STACK BEHAVIOR (Primitives)
+let name1 = "Avika";
+let name2 = name1; // Real copy created
+name2 = "AI"; 
+console.log(name1); // "Avika" (Stays the same)
+
+// HEAP BEHAVIOR (References)
+let arr1 = [1, 2];
+let arr2 = arr1; // Both variables point to the same ADDRESS
+arr2.push(3);
+console.log(arr1); // [1, 2, 3] (Changed because arr1 and arr2 share the same reference!)
+
+
+// ==========================================
+// 4. SHALLOW COPY VS. DEEP COPY
+// ==========================================
+
+const user = {
+    name: "Alex",
+    details: { age: 25 } // Nested object
+};
+
+// --- SHALLOW COPY ({...}) ---
+const shallowUser = { ...user };
+shallowUser.name = "Bob"; 
+shallowUser.details.age = 30; // UPDATES ORIGINAL! (Nested objects are still linked)
+
+// --- DEEP COPY (JSON Method) ---
+// Converts to string and back, breaking ALL memory links.
+const deepUser = JSON.parse(JSON.stringify(user));
+deepUser.details.age = 99; // Original 'user' remains safe!
+
+console.log("Original Age:", user.details.age); // 30 (from shallow)
+console.log("Deep Copy Age:", deepUser.details.age); // 99
