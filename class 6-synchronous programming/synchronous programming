@@ -1,0 +1,91 @@
+/**
+ * @file JS-Async-Mastery.js
+ * @description A deep dive into Asynchronous JavaScript, the Event Loop, and Execution Order.
+ * 
+ */
+
+// ==========================================
+// 1. FUNCTIONS AS FIRST-CLASS CITIZENS
+// ==========================================
+/* * In JS, functions are treated like any other variable. 
+ * They can be:
+ * - Assigned to variables
+ * - Passed as arguments (Callbacks)
+ * - Returned from other functions
+ */
+
+// A simple Callback Example
+function orderCoffee(name, callback) {
+    console.log(`Brewing coffee for ${name}...`);
+    // The "callback" is executed only when the task is done.
+    callback(); 
+}
+
+const notifyUser = () => console.log("☕ Coffee is ready! (Callback executed)");
+
+// Passing 'notifyUser' as an argument
+orderCoffee("Alex", notifyUser);
+
+
+// ==========================================
+// 2. THE EXECUTION MODEL
+// ==========================================
+/* * SYNCHRONOUS: Line-by-line execution. Blocking.
+ * ASYNCHRONOUS: Allows JS to "offload" long tasks to the browser 
+ * so the main thread doesn't freeze.
+ */
+
+
+// ==========================================
+// 3. THE ENGINE ROOM (THE EVENT LOOP)
+// ==========================================
+/*
+ * JavaScript is SINGLE-THREADED. It uses a system to manage concurrency:
+ * * 1. CALL STACK: Where code runs (LIFO: Last In, First Out).
+ * 2. WEB APIs: Browser helpers for timers, fetch requests, and DOM events.
+ * 3. CALLBACK QUEUE (Macro Tasks): Where setTimeout/setInterval callbacks wait.
+ * 4. MICROTASK QUEUE: The VIP queue for Promises (.then()).
+ * 5. EVENT LOOP: The "Traffic Cop" that moves tasks from Queues to the Stack 
+ * ONLY when the Stack is empty.
+ */
+
+
+
+// ==========================================
+//
+// ==========================================
+/* * CRITICAL RULE: 
+ * The Event Loop clears the Microtask Queue COMPLETELY before 
+ * moving to the Callback (Macro) Queue. 
+ * PROMISES > TIMERS.
+ */
+
+console.log("--- Execution Start ---");
+
+console.log("Start"); // 1. Synchronous: Goes straight to Call Stack
+
+setTimeout(() => {
+    console.log("Timer"); // 4. Macro Task: Sent to Callback Queue
+}, 0);
+
+Promise.resolve().then(() => {
+    console.log("Promise"); // 3. Microtask: Sent to the VIP Microtask Queue
+});
+
+console.log("End"); // 2. Synchronous: Goes straight to Call Stack
+
+/* * FINAL OUTPUT ORDER:
+ * 1. Start   (Sync)
+ * 2. End     (Sync)
+ * 3. Promise (Microtask - VIP)
+ * 4. Timer   (Macro Task)
+ */
+
+// 
+//
+//
+/*
+ * - Callbacks manage async behavior.
+ * - The Call Stack must be empty for the Event Loop to trigger.
+ * - Microtasks (Promises) always interrupt the flow to execute before Macrotasks (setTimeout).
+ */
