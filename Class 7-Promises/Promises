@@ -1,0 +1,128 @@
+/**
+ * JAVASCRIPT PROMISES - A Comprehensive Guide
+ * -------------------------------------------
+ * A Promise is an object representing the eventual completion (or failure) 
+ * of an asynchronous operation and its resulting value.
+ */
+
+// ==========================================
+// 1. CREATING A PROMISE
+// ==========================================
+
+/**
+ * Promise States:
+ * - Pending: Initial state, neither fulfilled nor rejected.
+ * - Fulfilled: Operation completed successfully.
+ * - Rejected: Operation failed.
+ */
+
+// Example 1: Basic Promise Creation
+const basicPromise = new Promise((resolve, reject) => {
+    // resolve(value) is called when the operation succeeds
+    resolve("Promise resolved successfully");
+});
+
+basicPromise.then(result => console.log("Example 1:", result));
+
+
+// Example 2: Promise with Conditions
+const checkLoginPromise = new Promise((resolve, reject) => {
+    let isLoggedIn = false;
+
+    if (isLoggedIn) {
+        resolve("User logged in");
+    } else {
+        // reject(error) is called when the operation fails
+        reject("User not logged in");
+    }
+});
+
+checkLoginPromise
+    .then(result => console.log("Example 2:", result))
+    .catch(error => console.log("Example 2 Error:", error));
+
+
+// Example 3: Promise with Delay (Asynchronous Logic)
+const delayPromise = new Promise((resolve) => {
+    setTimeout(() => {
+        resolve("Data received after 2 seconds");
+    }, 2000);
+});
+
+delayPromise.then(data => console.log("Example 3:", data));
+
+
+// ==========================================
+// 2. CHAINING PROMISES
+// ==========================================
+/**
+ * Chaining allows executing multiple async tasks one after another.
+ * Each .then() returns a NEW promise, avoiding "callback hell."
+ */
+
+// Example: Passing data through a chain
+Promise.resolve(5)
+    .then(value => {
+        return value + 5; // Returns 10
+    })
+    .then(value => {
+        return value * 2; // Returns 20
+    })
+    .then(finalValue => {
+        console.log("Chaining Result:", finalValue); // Output: 20
+    });
+
+
+// ==========================================
+// 3. HANDLING ERRORS
+// ==========================================
+/**
+ * .catch() handles any error that occurs in the promise or the chain.
+ * If a promise is rejected, control moves directly to the nearest .catch().
+ */
+
+const errorExample = new Promise((resolve, reject) => {
+    reject("Initial Operation failed");
+});
+
+errorExample
+    .then(data => console.log(data)) // This block is skipped
+    .catch(error => console.log("Catch block caught:", error));
+
+
+// Example: Error inside a .then() chain
+Promise.resolve("Start")
+    .then(val => {
+        throw new Error("Something went wrong mid-chain!");
+    })
+    .then(val => {
+        console.log("I will never run");
+    })
+    .catch(err => {
+        console.log("Caught mid-chain error:", err.message);
+    });
+
+/**
+ * Key Points:
+ * 1. .then() waits for the previous one to finish.
+ * 2. Only ONE .catch() is enough for multiple .then() blocks.
+ * 3. Once a promise is settled (resolved/rejected), it cannot change state.
+ */
+
+
+// ==========================================
+// PRACTICE QUESTIONS (SOLUTIONS)
+// ==========================================
+
+// Q1: Create a promise that resolves with "Task completed" after 1 second.
+const task = new Promise((resolve) => {
+    setTimeout(() => resolve("Task completed"), 1000);
+});
+
+// Q2: Write a promise that checks if a number is even.
+const checkEven = (num) => {
+    return new Promise((resolve, reject) => {
+        if (num % 2 === 0) resolve("Even number");
+        else reject("Odd number");
+    });
+};
